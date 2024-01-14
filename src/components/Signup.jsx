@@ -1,14 +1,23 @@
 // Signup.js
 import React from 'react';
-
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
+
+    const navigate = useNavigate();
 
     const handleLogin = () => {
         // Perform login logic if needed
         
         // Redirect to the login page
+        navigate('/login');
+    };
+
+    const handleSingup = () => {
+        // Perform login logic if needed
         
+        // Redirect to the login page
+        navigate('/');
     };
 
     return (
@@ -55,8 +64,9 @@ const Signup = () => {
                     <button
                         className="p-2 rounded border-2 border-black"
                         type="submit"
+                        onClick={handleSingup}
                     >
-                        Login
+                        Signup
                     </button>
                     <p>Already have an account? <span className='cursor-pointer font-bold' onClick={handleLogin}>Sign In</span> </p>
                 </form>

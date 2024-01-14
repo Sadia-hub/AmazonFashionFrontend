@@ -1,5 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
+
+    const navigate = useNavigate();
+
+    const handleSignup = () => {
+        navigate('/signup');
+    };
+
+    const handleLogin = () => {
+        // Perform login logic if needed
+        
+        // Redirect to the login page
+        navigate('/');
+    };
+
     return (
         <div className="flex h-screen">
             <div className="m-auto p-6 rounded shadow-md">
@@ -32,12 +47,13 @@ const Login = () => {
                     <button
                         className="p-2 rounded border-2 border-black"
                         type="submit"
+                        onClick={handleLogin}
                     >
                         Login
                     </button>
 
                 </form>
-                <p>Don't have an account? <span className='cursor-pointer font-bold'>Signup</span> </p>
+                <p>Don't have an account? <span className='cursor-pointer font-bold' onClick={handleSignup}>Signup</span> </p>
             </div>
         </div>
     );

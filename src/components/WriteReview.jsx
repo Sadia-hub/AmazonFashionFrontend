@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
+const WriteReview = ({ isOpen, onClose, onSubmit }) => {
     const formik = useFormik({
         initialValues: {
             asin: '',
@@ -75,4 +75,4 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
     );
 };
 
-export default ReviewModal;
+export default WriteReview;

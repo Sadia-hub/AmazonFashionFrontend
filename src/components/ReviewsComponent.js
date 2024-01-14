@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import useProductsFetcher from "../hooks/useProductsFetcher"
 import Reviews from './Reviews';
-// import ReviewModal from './ReviewModal';
-import Button from './Button';
+
+import { useNavigate } from 'react-router-dom';
+
 const ReviewsComponent = () => {
+
+    const navigate = useNavigate();
     
     const { products, setProducts, isLoading, error } = useProductsFetcher("http://localhost:8080/reviews");
     
@@ -17,6 +20,10 @@ const ReviewsComponent = () => {
                 return product;
             });
         });
+    };
+
+    const handleLogout = () => {
+        navigate('/login');
     };
 
     // const handleSubmit = (formData) => {
@@ -35,15 +42,24 @@ const ReviewsComponent = () => {
 
     return (
         <div className="container mx-auto p-4" >
-            <h1 className="text-2xl font-bold mb-4" >Reviews</h1>
-            <Button onClick={()=>{}}>Write a Review</Button>
+
+            <div className="flex justify-between items-between min-w-full">
+                <h1 className="text-2xl font-bold mb-4" >Reviews</h1>
+                <button className="p-2 rounded border-2 border-black mb-2"
+                onClick={handleLogout}
+                >Logout</button>
+            </div>
+            
+           
             <table className="min-w-full border border-collapse border-gray-800">
                 <thead>
                     <tr className="bg-gray-700 text-white">
                         <th className="py-2 px-4">Product ID</th>
-                        <th className="py-2 px-4">Review Count</th>
+                        <th className="py-2 px-4">Total Reviews</th>                       
                         <th className="py-2 px-4">Toggle Reviews</th>
                         <th className="py-2 px-4">Charts</th>
+                        <th className="py-2 px-4">Your Reviews</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -54,17 +70,21 @@ const ReviewsComponent = () => {
                                 <td className="py-2 px-4">{product.reviews.length}</td>
                                 <td className="py-2 px-4" >
                                     <button onClick={() => toggleReviews(product.productID)}>
-                                        {product.isCollapsed ? '+' : '-'}
+                                        {product.isCollapsed ? 'See Reviews' : 'Hide Reviews'}
                                     </button>
                                 </td>
                                 <td className="py-2 px-4 cursor-pointer">
-                                    <img src="/graph.svg" alt="My SVG Image" height="40px" width="40px"/>
+                                    <img src="/graph.svg" alt="My SVG Image" height="40px" width="40px"/>                                    
+                                </td>
+                                <td className="py-2 px-4 cursor-pointer">
+                                    <img src="/add.svg" alt="My SVG Image" height="40px" width="40px"/>                                   
                                 </td>
                             </tr>
                             {!product.isCollapsed && (
                                 <tr className="py-2 px-4 border-collapse border-gray-800">
                                     <td colSpan="4">
                                         <Reviews reviews={product.reviews}/>
+                                        
                                     </td>
                                 </tr>
                             )}

@@ -23,7 +23,14 @@ const Login = () => {
         apiCall('login',body, "POST", "json", null)
         .then((res)=>{
             console.log("res of contact is",res)
-            res.success ? navigate("/") : setError(res.msg)
+            if(res.success) {
+                localStorage.setItem("name", res.user.name);
+                localStorage.setItem("id", res.user._id);
+                localStorage.setItem("token", res.token);
+                navigate("/") 
+            }
+            else
+            setError(res.msg)
             
         })
         .catch((err)=>{

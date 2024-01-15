@@ -1,25 +1,38 @@
 // Signup.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import apiCall from '../apiCall';
 
 const Signup = () => {
 
-    const [ username, setUsername ] = useState("")
     const [ email, setEmail ] = useState("")
     const [ password, setPassword ] = useState("")
+    const [ name, setName] = useState("")
 
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        // Perform login logic if needed
-        
-        // Redirect to the login page
         navigate('/login');
     };
 
     const handleSingup = (e) => {
-       
-        navigate('/');
+
+        e.preventDefault()
+        const body = {
+            name,
+            email,
+            password
+        }
+        apiCall('signup',body, "POST", "json", null)
+        .then((res)=>{
+            console.log("res of contact is",res)
+            res.success && navigate("/login")
+            
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+        
     };
 
     return (
@@ -27,18 +40,18 @@ const Signup = () => {
             <div className="m-auto p-10 rounded shadow-md">
                 <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
                 <form onSubmit={handleSingup}>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-                            Username
+                <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                            Name
                         </label>
                         <input
                             className="border border-gray-300 p-2 w-full"
                             type="text"
-                            id="username"
-                            name="username"
-                            placeholder="Enter your username"
-                            value={username}
-                            onChange={({target})=>{setUsername(target.value)}}
+                            id="name"
+                            name="name"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={({target})=>{setName(target.value)}}
                             required
                         />
                     </div>

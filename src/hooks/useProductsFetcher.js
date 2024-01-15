@@ -12,10 +12,17 @@ const useProductsFetcher = (url) => {
                 const response = await fetch(url);
                 const data = await response.json();
                 // Add isCollapsed property to each product to manage visibility
-                const productsWithVisibility = data.allReviews.map((product) => ({
-                    ...product,
+                
+                const id = localStorage.getItem("id")
+                const productsWithVisibility = data.allReviews.map((product) => {
+
+                    let isReviewedFilter = product.reviews.filter(({reviewerID, _id})=>reviewerID==id)
+                    
+
+                    return {...product,
                     isCollapsed: true,
-                }));
+                    isReviewed: isReviewedFilter.length > 0 ? isReviewedFilter[0]._id  : ""}
+                });
                 setProducts(productsWithVisibility);
             } catch (error) {
                 setError(error);

@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import useProductsFetcher from "../hooks/useProductsFetcher"
 import Reviews from './Reviews';
+import BarChart from './charts/BarChart';
 
 import { useNavigate } from 'react-router-dom';
 
 const ReviewsComponent = () => {
+
+    const [ name, setName ] = useState("")
+    const [ showGraph, setShowGraph ] = useState(false)
+
+    useEffect(()=>{
+        const name = localStorage.getItem("name")       
+        setName(()=>name)
+    }, [])
 
     const navigate = useNavigate();
     
@@ -23,14 +32,9 @@ const ReviewsComponent = () => {
     };
 
     const handleLogout = () => {
+        localStorage.removeItem('token');
         navigate('/login');
     };
-
-    // const handleSubmit = (formData) => {
-    //     // Handle the form data submission (e.g., send to the server)
-    //     console.log('Form data submitted:', formData);
-    //     closeModal();
-    // };
   
     if (isLoading) {
         return <p>Loading...</p>;
@@ -42,8 +46,9 @@ const ReviewsComponent = () => {
 
     return (
         <div className="container mx-auto p-4" >
-
+            <h1 className="text-2xl font-bold mb-4" >Welcome {name}</h1>
             <div className="flex justify-between items-between min-w-full">
+                
                 <h1 className="text-2xl font-bold mb-4" >Reviews</h1>
                 <button className="p-2 rounded border-2 border-black mb-2"
                 onClick={handleLogout}
@@ -73,17 +78,28 @@ const ReviewsComponent = () => {
                                         {product.isCollapsed ? 'See Reviews' : 'Hide Reviews'}
                                     </button>
                                 </td>
-                                <td className="py-2 px-4 cursor-pointer">
+                                <td className="py-2 px-4 cursor-pointer" onClick={()=>setShowGraph((prev)=>!prev)}>
                                     <img src="/graph.svg" alt="My SVG Image" height="40px" width="40px"/>                                    
                                 </td>
-                                <td className="py-2 px-4 cursor-pointer">
-                                    <img src="/add.svg" alt="My SVG Image" height="40px" width="40px"/>                                   
+                                <td className="py-2 px-4 cursor-pointer" >
+                                    {
+                                        product.isReviewed ? <img src="/edit.svg" alt="My SVG Image" height="40px" width="40px" onClick={()=>navigate(`/update/${product.isReviewed}`)}/> : <img src="/add.svg" alt="My SVG Image" height="40px" width="40px" onClick={()=>navigate(`/review/${product.productID}`)}/>
+                                    }
+                                                                      
                                 </td>
                             </tr>
                             {!product.isCollapsed && (
                                 <tr className="py-2 px-4 border-collapse border-gray-800">
                                     <td colSpan="4">
                                         <Reviews reviews={product.reviews}/>
+                                        
+                                    </td>
+                                </tr>
+                            )}
+                             {showGraph && (
+                                <tr className="py-2 px-4 border-collapse border-gray-800">
+                                    <td colSpan="4">
+                                        <BarChart dataPoints={product.reviews} />
                                         
                                     </td>
                                 </tr>
